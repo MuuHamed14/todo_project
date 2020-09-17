@@ -1,0 +1,40 @@
+{% load static%}
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title> {% block title %} {% endblock %} </title>
+    <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.min.css'%}">
+
+
+</head>
+
+<body>
+{%block body%}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home:todo_list' %}"> <h3> Home page </h3> </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+<div class="container">
+<ol class="breadcrumb my-4">
+    {% block breadcrumb %}
+
+    {% endblock %}
+</ol>
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+{% endblock %}
+
+<script src="{%static 'accounts/js/jquery-3.4.1.min.js'%}"></script>
+<script src="{%static 'accounts/js/popper.min.js'%}"></script>
+<script src="{%static 'accounts/js/bootstrap.min.js'%}"></script>
+
+</body>
+</html>

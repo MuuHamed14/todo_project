@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home:todo_list' %}"> <h3> الصفحة الرئيسية </h3> </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainMenu">
+        {% if user.is_authenticated %}
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user.username }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+            <a class="dropdown-item" href="{% url 'my_account' %}">الاكونت الخاص بك </a>
+            <a class="dropdown-item" href="{% url 'password_change' %}">تغيير الباسورد</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">تسجيل الخروج </a>
+          </div>
+        </li>
+      </ul>
+        {% else %}
+        <form class="form-line ml-auto">
+            <a href="{% url 'login' %}" class="btn btn-success"> تسجيل الدخول  </a>
+            <a href="{% url 'signup' %}" class="btn btn-primary"> انشاء حساب  </a>
+        </form>
+        {% endif %}
+
+    </div>
+  </div>
+</nav>
+<div class="page-content page-container" id="page-content">
+  <div class="padding">
+    <div class="row container d-flex justify-content-center">
+      <div class="col-lg-12">
+        <div class="card px-3">
+          <div class="card-body text-right">
+            <h4 class="card-title">قائمة مهامك الرئيسية</h4>
+              <form method="post">
+                  {% csrf_token %}
+              <div class="add-items d-flex">
+                <input type="text"  name="title" class="form-control todo-list-input" placeholder="ما هي مهامك اليوم ؟">
+                <button type="submit"
+                  class="add btn btn-primary font-weight-bold todo-list-add-btn padding-box ">إضافة</button>
+              </div>
+             </form>
+
+            <div class="list-wrapper">
+              <ul class="d-flex flex-column-reverse todo-list">
+                
+
+                {% for todo in todo %}
+                <li {% if todo.checked == True %} class="completed" {% endif %}>
+                  <div class="form-check">
+                      <form method="post">
+                          {% csrf_token %}
+                        <label class="form-check-label">
+                        <input type="hidden" name="todo_id" value="{{todo.id}}">
+                        <input class="checkbox" type="checkbox" onchange="submit();" {% if todo.checked == True %} checked {% endif %} >
+                      </form>
+                          {{todo.title}}
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+
+
+                  <a style="margin-left: auto " href="{% url 'home:update_todo' todo.id %}"><i
+                      class="remove mdi1 mdi1-close-circle-outline"></i></a>
+
+
+                  <a style="margin-left: 2px" href="{% url 'home:delete_todo' todo.id %}"><i
+                      class="remove mdi mdi-close-circle-outline"></i></a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
